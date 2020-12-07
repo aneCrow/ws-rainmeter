@@ -40,6 +40,7 @@
       "end": "$",
       "name": "meta.option.rainmeter",
       "patterns": [
+        { "include": "#option-bang" },
         { "include": "#option-defualt" }
       ]
     },
@@ -57,6 +58,44 @@
         { "include": "#variable" },
         { "include": "#string-quoted" },
         { "include": "#string-unquoted" }
+      ]
+    },
+    "option-bang": {
+      "begin": "^(\\w+Action\\d*)\\s*(=)\\s*",
+      "end": "$",
+      "contentName": "meta.bang.rainmeter",
+      "beginCaptures": {
+        "1": { "name": "entity.other.attribute-name.rainmeter" },
+        "2": { "name": "punctuation.separator.key-value.rainmeter" }
+      },
+      "patterns": [
+        { "include": "#numeric" },
+        { "include": "#string-quoted" },
+        { "include": "#bang-single" },
+        { "include": "#bang-multiple" }
+      ]
+    },
+    "bang-single": {
+      "match": "(?<==\\s*)(!{0,1}\\w+)\\b",
+      "captures": {
+        "1": { "name": "support.function.bang.rainmeter" }
+      }
+    },
+    "bang-multiple": {
+      "Name": "meta.bang-multiple.rainmeter",
+      "patterns": [
+        {
+          "match": "(\\[)(!{0,1}\\w+)\\b",
+          "captures": {
+            "1": { "name": "punctuation.definition.bang.begin.rainmeter" },
+            "2": { "name": "support.function.bang.rainmeter" }
+          }
+        },
+        { "include": "#numeric" },
+        {
+          "match": "\\]",
+          "name": "punctuation.definition.bang.end.rainmeter"
+        }
       ]
     },
     "numeric": {
