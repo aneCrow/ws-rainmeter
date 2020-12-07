@@ -43,6 +43,7 @@
         { "include": "#option-include" },
         { "include": "#option-bang" },
         { "include": "#option-type" },
+        { "include": "#option-text" },
         { "include": "#option-meterstyle" },
         { "include": "#option-group" },
         { "include": "#option-defualt" }
@@ -58,9 +59,9 @@
         "3": { "name": "punctuation.separator.key-value.rainmeter" }
       },
       "patterns": [
-        { "include": "#numeric" },
-        { "include": "#variable" },
         { "include": "#string-quoted" },
+        { "include": "#variable" },
+        { "include": "#numeric" },
         { "include": "#string-unquoted" }
       ]
     },
@@ -202,6 +203,25 @@
         }
       ]
     },
+    "option-text": {
+      "begin": "^((Text)\\s*)(=)",
+      "end": "$",
+      "contentName": "meta.value.option.text.rainmeter",
+      "beginCaptures": {
+        "1": { "name": "meta.key.option.text.rainmeter" },
+        "2": { "name": "support.type.property-name.rainmeter" },
+        "3": { "name": "punctuation.separator.key-value.rainmeter" }
+      },
+      "patterns": [
+        {
+          "match":"%\\d+\\b",
+          "name":"variable.language.rainmeter"
+        },
+        { "include": "#string-quoted" },
+        { "include": "#variable" },
+        { "include": "#string-unquoted" }
+      ]
+    },
     "bang-single": {
       "patterns": [
         {
@@ -210,9 +230,9 @@
             "1": { "name": "support.function.bang.rainmeter" }
           }
         },
-        { "include": "#numeric" },
+        { "include": "#string-quoted" },
         { "include": "#variable" },
-        { "include": "#string-quoted" }
+        { "include": "#numeric" }
       ]
     },
     "bang-multiple": {
@@ -231,9 +251,9 @@
           "match": "\\]",
           "name": "punctuation.definition.bang.end.rainmeter"
         },
-        { "include": "#numeric" },
+        { "include": "#string-quoted" },
         { "include": "#variable" },
-        { "include": "#string-quoted" }
+        { "include": "#numeric" }
       ]
     },
     "numeric": {
@@ -284,8 +304,8 @@
           }
         },
         {
-          "begin": "$",
-          "end": "$",
+          "begin": "\\$",
+          "end": "\\$",
           "contentName": "variable.other.readwrite.event.rainmeter",
           "beginCaptures": {
             "0": {
