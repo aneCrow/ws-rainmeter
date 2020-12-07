@@ -42,6 +42,7 @@
       "patterns": [
         { "include": "#option-include" },
         { "include": "#option-bang" },
+        { "include": "#option-type" },
         { "include": "#option-meterstyle" },
         { "include": "#option-group" },
         { "include": "#option-defualt" }
@@ -92,21 +93,23 @@
           "end": "\\s*$",
           "contentName": "meta.path.rainmeter",
           "patterns": [
-            { "include": "#variable" },
-            { "include": "#string-unquoted" },
-            {
-              "match": "\\\\",
-              "name": "punctuation.support.path.rainmeter"
-            },
             {
               "match": "(\\.)(ini|inc)",
               "captures": {
                 "1": {
                   "name": "punctuation.separator.filename-extension.rainmeter"
                 },
-                "2": { "name": "support.constant.media-type.path.rainmeter" }
+                "2": {
+                  "name": "support.constant.media-type.rainmeter"
+                }
               }
-            }
+            },
+            {
+              "match": "\\\\",
+              "name": "punctuation.support.path.rainmeter"
+            },
+            { "include": "#variable" },
+            { "include": "#string-unquoted" }
           ]
         }
       ]
@@ -135,9 +138,9 @@
     "option-group": {
       "begin": "^((Group)\\s*)(=)",
       "end": "$",
-      "contentName": "meta.value.option.class.rainmeter",
+      "contentName": "meta.value.option.group.rainmeter",
       "beginCaptures": {
-        "1": { "name": "meta.key.option.class.rainmeter" },
+        "1": { "name": "meta.key.option.group.rainmeter" },
         "2": { "name": "support.type.property-name.rainmeter" },
         "3": { "name": "punctuation.separator.key-value.rainmeter" }
       },
@@ -150,6 +153,52 @@
         {
           "match": "\\|",
           "name": "punctuation.separator.group.rainmeter"
+        }
+      ]
+    },
+    "option-type": {
+      "begin": "^((Meter|Measure|Plugin|MeasureName\\d*)\\s*)(=)",
+      "end": "$",
+      "contentName": "meta.value.option.type.rainmeter",
+      "beginCaptures": {
+        "1": { "name": "meta.key.option.type.rainmeter" },
+        "2": { "name": "support.type.property-name.rainmeter" },
+        "3": { "name": "punctuation.separator.key-value.rainmeter" }
+      },
+      "patterns": [
+        {
+          "match": "(?<=^Meter\\s*=\\s*)(Bar|Bitmap|Button|Histogram|Image|Line|Rotator|Roundline|Shape|String)(?=\\s*$)",
+          "name": "constant.language.type.meter.rainmeter"
+        },
+        {
+          "match": "(?<=^Measure\\s*=\\s*)(Calc|CPU|FreeDiskSpace|Loop|MediaKey|Memory|Net|NowPlaying|Plugin|RecycleManager|Registry|Script|String|Time|Uptime|WebParser)(?=\\s*$)",
+          "name": "constant.language.type.measure.rainmeter"
+        },
+        {
+          "match": "(?<=^MeasureName\\d*\\s*=\\s*)(\\w+)(?=\\s*$)",
+          "name": "entity.name.type.rainmeter"
+        },
+        {
+          "match": "(?<=^Plugin\\s*=\\s*)(ActionTimer|AudioLevel|CoreTemp|FileView|FolderInfo|InputText|Ping|Power|Process|Quote|ResMon|RunCommand|SpeedFan|SysInfo|UsageMonitor|WiFiStatus|Win7Audio|WindowMessage)(?=\\s*$)",
+          "name": "constant.language.type.plugin.rainmeter"
+        },
+        {
+          "match": "(?<=^Plugin\\s*=\\s*)(AdvancedCPU|iTunes|PerfMon)(?=\\s*$)",
+          "name": "constant.language.type.plugin.deprecated.rainmeter"
+        },
+        {
+          "match": "(?<=^Plugin\\s*=\\s*).*(\\b\\w+)(\\.)(dll|DLL)(?=\\s*$)",
+          "captures": {
+            "1": {
+              "name": "constant.language.type.plugin.additional.rainmeter"
+            },
+            "2": {
+              "name": "punctuation.separator.filename-extension.rainmeter"
+            },
+            "3": {
+              "name": "support.constant.media-type.rainmeter"
+            }
+          }
         }
       ]
     },
