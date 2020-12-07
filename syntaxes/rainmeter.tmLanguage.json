@@ -42,6 +42,8 @@
       "patterns": [
         { "include": "#option-include" },
         { "include": "#option-bang" },
+        { "include": "#option-meterstyle" },
+        { "include": "#option-group" },
         { "include": "#option-defualt" }
       ]
     },
@@ -51,7 +53,7 @@
       "contentName": "meta.value.option.defualt.rainmeter",
       "beginCaptures": {
         "1": { "name": "meta.key.option.defualt.rainmeter" },
-        "2": { "name": "entity.other.attribute-name.rainmeter" },
+        "2": { "name": "support.type.property-name.rainmeter" },
         "3": { "name": "punctuation.separator.key-value.rainmeter" }
       },
       "patterns": [
@@ -67,7 +69,7 @@
       "contentName": "meta.value.option.bang.rainmeter",
       "beginCaptures": {
         "1": { "name": "meta.key.option.bang.rainmeter" },
-        "2": { "name": "entity.other.attribute-name.rainmeter" },
+        "2": { "name": "support.type.property-name.rainmeter" },
         "3": { "name": "punctuation.separator.key-value.rainmeter" }
       },
       "patterns": [
@@ -81,7 +83,7 @@
       "contentName": "meta.value.option.include.rainmeter",
       "beginCaptures": {
         "1": { "name": "meta.key.option.include.rainmeter" },
-        "2": { "name": "entity.other.attribute-name.include.rainmeter" },
+        "2": { "name": "support.type.property-name.rainmeter" },
         "3": { "name": "punctuation.separator.key-value.rainmeter" }
       },
       "patterns": [
@@ -106,6 +108,48 @@
               }
             }
           ]
+        }
+      ]
+    },
+    "option-meterstyle": {
+      "begin": "^((MeterStyle)\\s*)(=)",
+      "end": "$",
+      "contentName": "meta.value.option.meterstyle.rainmeter",
+      "beginCaptures": {
+        "1": { "name": "meta.key.option.meterstyle.rainmeter" },
+        "2": { "name": "support.type.property-name.rainmeter" },
+        "3": { "name": "punctuation.separator.key-value.rainmeter" }
+      },
+      "patterns": [
+        { "include": "#variable" },
+        {
+          "match": "\\w+",
+          "name": "entity.other.inherited-class.rainmeter"
+        },
+        {
+          "match": "\\|",
+          "name": "punctuation.separator.meterstyle.rainmeter"
+        }
+      ]
+    },
+    "option-group": {
+      "begin": "^((Group)\\s*)(=)",
+      "end": "$",
+      "contentName": "meta.value.option.class.rainmeter",
+      "beginCaptures": {
+        "1": { "name": "meta.key.option.class.rainmeter" },
+        "2": { "name": "support.type.property-name.rainmeter" },
+        "3": { "name": "punctuation.separator.key-value.rainmeter" }
+      },
+      "patterns": [
+        { "include": "#variable" },
+        {
+          "match": "\\w+",
+          "name": "entity.name.class.rainmeter"
+        },
+        {
+          "match": "\\|",
+          "name": "punctuation.separator.group.rainmeter"
         }
       ]
     },
