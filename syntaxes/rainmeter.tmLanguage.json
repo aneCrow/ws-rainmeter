@@ -25,6 +25,14 @@
         "0": { "name": "punctuation.definition.section.end.rainmeter" }
       },
       "patterns": [
+        {
+          "match": "(?<=\\[)(Skin|Rainmeter|Metadata|TrayMeasure|Variables)(?=\\])",
+          "name": "constant.language.type.rainmeter"
+        },
+        {
+          "match": "(?<=\\[)[\\w]+(?=\\])",
+          "name": "entity.name.type.rainmeter"
+        }
       ]
     },
     "option": {
@@ -32,7 +40,18 @@
       "end": "$",
       "name": "meta.option.rainmeter",
       "patterns": [
+        { "include": "#option-defualt" }
       ]
+    },
+    "option-defualt": {
+      "begin": "^((\\w+)\\b\\s*)(=)\\s*",
+      "end": "$",
+      "contentName": "meta.value.rainmeter",
+      "beginCaptures": {
+        "1": { "name": "meta.key.rainmeter" },
+        "2": { "name": "entity.other.attribute-name.rainmeter" },
+        "3": { "name": "punctuation.separator.key-value.rainmeter" }
+      }
     }
   }
 }
