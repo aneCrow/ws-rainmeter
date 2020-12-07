@@ -40,12 +40,13 @@
       "end": "$",
       "name": "meta.option.rainmeter",
       "patterns": [
+        { "include": "#option-include" },
         { "include": "#option-bang" },
         { "include": "#option-defualt" }
       ]
     },
     "option-defualt": {
-      "begin": "^((\\w+)\\b\\s*)(=)\\s*",
+      "begin": "^((\\w+)\\b\\s*)(=)",
       "end": "$",
       "contentName": "meta.value.option.defualt.rainmeter",
       "beginCaptures": {
@@ -61,7 +62,7 @@
       ]
     },
     "option-bang": {
-      "begin": "^((\\w+Action\\d*)\\s*)(=)\\s*",
+      "begin": "^((\\w+Action\\d*)\\s*)(=)",
       "end": "$",
       "contentName": "meta.value.option.bang.rainmeter",
       "beginCaptures": {
@@ -72,6 +73,40 @@
       "patterns": [
         { "include": "#bang-single" },
         { "include": "#bang-multiple" }
+      ]
+    },
+    "option-include": {
+      "begin": "^((@include\\w*)\\s*)(=)",
+      "end": "$",
+      "contentName": "meta.value.option.include.rainmeter",
+      "beginCaptures": {
+        "1": { "name": "meta.key.option.include.rainmeter" },
+        "2": { "name": "entity.other.attribute-name.include.rainmeter" },
+        "3": { "name": "punctuation.separator.key-value.rainmeter" }
+      },
+      "patterns": [
+        {
+          "begin": "(?<==)\\s*",
+          "end": "\\s*$",
+          "contentName": "meta.path.rainmeter",
+          "patterns": [
+            { "include": "#variable" },
+            { "include": "#string-unquoted" },
+            {
+              "match": "\\\\",
+              "name": "punctuation.support.path.rainmeter"
+            },
+            {
+              "match": "(\\.)(ini|inc)",
+              "captures": {
+                "1": {
+                  "name": "punctuation.separator.filename-extension.rainmeter"
+                },
+                "2": { "name": "support.constant.media-type.path.rainmeter" }
+              }
+            }
+          ]
+        }
       ]
     },
     "bang-single": {
