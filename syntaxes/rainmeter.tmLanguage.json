@@ -245,6 +245,7 @@
     },
     "bang-single": {
       "patterns": [
+        { "include": "#string-quoted-magic" },
         { "include": "#string-quoted" },
         {
           "match": "(?<==\\s*)(!{0,1}\\w+)\\b",
@@ -264,6 +265,7 @@
       },
       "contentName": "meta.bang-multiple.value.option.bang.rainmeter",
       "patterns": [
+        { "include": "#string-quoted-magic" },
         { "include": "#string-quoted" },
         {
           "match": "(\\[)(!{0,1}\\w+)\\b",
@@ -317,6 +319,9 @@
     "variable": {
       "patterns": [
         {
+          "include": "#variable-built-in"
+        },
+        {
           "match": "(#)(\\w+)(#)",
           "captures": {
             "0": { "name": "variable.other.readwrite.var.rainmeter" },
@@ -349,6 +354,14 @@
       "match": "\\w+",
       "name": "string.word.rainmeter"
     },
+    "string-quoted-magic": {
+      "match": "(\"\"\")(.*)(\"\"\")",
+      "captures": {
+        "0": { "name": "string.quoted.magic.rainmeter" },
+        "1": { "name": "punctuation.definition.string.begin.rainmeter" },
+        "3": { "name": "punctuation.definition.string.end.rainmeter" }
+      }
+    },
     "string-quoted": {
       "patterns": [
         {
@@ -360,7 +373,11 @@
           },
           "endCaptures": {
             "0": { "name": "punctuation.definition.string.end.rainmeter" }
-          }
+          },
+          "patterns": [
+            { "include": "#variable" },
+            { "include": "#string-word" }
+          ]
         },
         {
           "begin": "\"",
@@ -371,6 +388,50 @@
           },
           "endCaptures": {
             "0": { "name": "punctuation.definition.string.end.rainmeter" }
+          },
+          "patterns": [
+            { "include": "#variable" },
+            { "include": "#string-word" }
+          ]
+        }
+      ]
+    },
+    "variable-built-in": {
+      "patterns": [
+        {
+          "match": "(#)(PROGRAMDRIVE|PROGRAMPATH|SETTINGSPATH|SKINSPATH|PLUGINSPATH|ADDONSPATH)(#)",
+          "captures": {
+            "0": { "name": "variable.other.constant.var.built-in.rainmeter" },
+            "1": { "name": "punctuation.definition.variable.begin.rainmeter" },
+            "2": { "name": "constant.language.variable.path.rainmeter" },
+            "3": { "name": "punctuation.definition.variable.end.rainmeter" }
+          }
+        },
+        {
+          "match": "(#)(@|CURRENTPATH|CURRENTFILE|ROOTCONFIGPATH|ROOTCONFIG|CURRENTCONFIG|CURRENTCONFIG(X|Y|WIDTH|HEIGHT))(#)",
+          "captures": {
+            "0": { "name": "variable.other.constant.var.built-in.rainmeter" },
+            "1": { "name": "punctuation.definition.variable.begin.rainmeter" },
+            "2": { "name": "constant.language.variable.skin.rainmeter" },
+            "3": { "name": "punctuation.definition.variable.end.rainmeter" }
+          }
+        },
+        {
+          "match": "(#)(CRLF|CURRENTSECTION|CONFIGEDITOR)(#)",
+          "captures": {
+            "0": { "name": "variable.other.constant.var.built-in.rainmeter" },
+            "1": { "name": "punctuation.definition.variable.begin.rainmeter" },
+            "2": { "name": "constant.language.variable.other.rainmeter" },
+            "3": { "name": "punctuation.definition.variable.end.rainmeter" }
+          }
+        },
+        {
+          "match": "(#)((WORK|SCREEN|PWORK|PSCREEN|VSCREEN)AREA(X|Y|WIDTH|HEIGHT)(@\\d+){0,1})(#)",
+          "captures": {
+            "0": { "name": "variable.other.constant.var.built-in.rainmeter" },
+            "1": { "name": "punctuation.definition.variable.begin.rainmeter" },
+            "2": { "name": "constant.language.variable.monitor.rainmeter" },
+            "5": { "name": "punctuation.definition.variable.end.rainmeter" }
           }
         }
       ]
