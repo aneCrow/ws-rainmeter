@@ -11,7 +11,7 @@
       "match": "^(;).*",
       "name": "comment.line.semicolon.rainmeter",
       "captures": {
-        "1": { "name": "punctuation.definition.comment.begin.rainmeter" }
+        "1": { "name": "punctuation.definition.comment.rainmeter" }
       }
     },
     "section": {
@@ -44,6 +44,7 @@
         { "include": "#option-bang" },
         { "include": "#option-type" },
         { "include": "#option-text" },
+        { "include": "#option-xy" },
         { "include": "#option-meterstyle" },
         { "include": "#option-group" },
         { "include": "#option-defualt" }
@@ -62,7 +63,7 @@
         { "include": "#string-quoted" },
         { "include": "#variable" },
         { "include": "#numeric" },
-        { "include": "#string-unquoted" }
+        { "include": "#string-word" }
       ]
     },
     "option-bang": {
@@ -75,8 +76,8 @@
         "3": { "name": "punctuation.separator.key-value.rainmeter" }
       },
       "patterns": [
-        { "include": "#bang-single" },
-        { "include": "#bang-multiple" }
+        { "include": "#bang-multiple" },
+        { "include": "#bang-single" }
       ]
     },
     "option-include": {
@@ -110,7 +111,7 @@
               "name": "punctuation.support.path.rainmeter"
             },
             { "include": "#variable" },
-            { "include": "#string-unquoted" }
+            { "include": "#string-word" }
           ]
         }
       ]
@@ -172,7 +173,7 @@
           "name": "constant.language.type.meter.rainmeter"
         },
         {
-          "match": "(?<=^Measure\\s*=\\s*)(Calc|CPU|FreeDiskSpace|Loop|MediaKey|Memory|Net|NowPlaying|Plugin|RecycleManager|Registry|Script|String|Time|Uptime|WebParser)(?=\\s*$)",
+          "match": "(?<=^Measure\\s*=\\s*)(Calc|CPU|FreeDiskSpace|Loop|MediaKey|(Physical|Swap){0,1}Memory|Net(In|Out|Total)|NowPlaying|Plugin|RecycleManager|Registry|Script|String|Time|Uptime|WebParser)(?=\\s*$)",
           "name": "constant.language.type.measure.rainmeter"
         },
         {
@@ -185,7 +186,7 @@
         },
         {
           "match": "(?<=^Plugin\\s*=\\s*)(AdvancedCPU|iTunes|PerfMon)(?=\\s*$)",
-          "name": "constant.language.type.plugin.deprecated.rainmeter"
+          "name": "invalid.deprecated.constant.language.type.plugin.rainmeter"
         },
         {
           "match": "(?<=^Plugin\\s*=\\s*).*(\\b\\w+)(\\.)(dll|DLL)(?=\\s*$)",
@@ -214,32 +215,56 @@
       },
       "patterns": [
         {
-          "match":"%\\d+\\b",
-          "name":"variable.language.rainmeter"
+          "match": "%\\d+",
+          "name": "variable.language.rainmeter"
         },
         { "include": "#string-quoted" },
         { "include": "#variable" },
-        { "include": "#string-unquoted" }
+        { "include": "#numeric" },
+        { "include": "#string-word" }
+      ]
+    },
+    "option-xy": {
+      "begin": "^((X|Y)\\s*)(=)",
+      "end": "(?<!\\.)\\b(\\d*|\\d+\\.\\d+)(r|R){0,1}\\s*$",
+      "contentName": "meta.value.option.xy.rainmeter",
+      "beginCaptures": {
+        "1": { "name": "meta.key.option.xy.rainmeter" },
+        "2": { "name": "support.type.property-name.rainmeter" },
+        "3": { "name": "punctuation.separator.key-value.rainmeter" }
+      },
+      "endCaptures": {
+        "1": { "name": "constant.numeric.xy.rainmeter" },
+        "2": { "name": "variable.language.rainmeter" }
+      },
+      "patterns": [
+        { "include": "#string-quoted" },
+        { "include": "#variable" },
+        { "include": "#numeric" }
       ]
     },
     "bang-single": {
       "patterns": [
+        { "include": "#string-quoted" },
         {
           "match": "(?<==\\s*)(!{0,1}\\w+)\\b",
           "captures": {
             "1": { "name": "support.function.bang.rainmeter" }
           }
         },
-        { "include": "#string-quoted" },
         { "include": "#variable" },
         { "include": "#numeric" }
       ]
     },
     "bang-multiple": {
-      "begin": "(?<==\\s*)",
+      "begin": "(?<==\\s*)(![eE]xecute){0,1}\\s*",
       "end": "$",
+      "beginCaptures": {
+        "1": { "name": "support.function.bang.rainmeter" }
+      },
       "contentName": "meta.bang-multiple.value.option.bang.rainmeter",
       "patterns": [
+        { "include": "#string-quoted" },
         {
           "match": "(\\[)(!{0,1}\\w+)\\b",
           "captures": {
@@ -251,7 +276,6 @@
           "match": "\\]",
           "name": "punctuation.definition.bang.end.rainmeter"
         },
-        { "include": "#string-quoted" },
         { "include": "#variable" },
         { "include": "#numeric" }
       ]
@@ -293,51 +317,37 @@
     "variable": {
       "patterns": [
         {
-          "begin": "#",
-          "end": "#",
-          "contentName": "variable.other.readwrite.rainmeter",
-          "beginCaptures": {
-            "0": { "name": "punctuation.definition.variable.begin.rainmeter" }
-          },
-          "endCaptures": {
-            "0": { "name": "punctuation.definition.variable.begin.rainmeter" }
+          "match": "(#)(\\w+)(#)",
+          "captures": {
+            "0": { "name": "variable.other.readwrite.var.rainmeter" },
+            "1": { "name": "punctuation.definition.variable.begin.rainmeter" },
+            "2": { "name": "entity.name.variable.rainmeter" },
+            "3": { "name": "punctuation.definition.variable.end.rainmeter" }
           }
         },
         {
-          "begin": "\\$",
-          "end": "\\$",
-          "contentName": "variable.other.readwrite.event.rainmeter",
-          "beginCaptures": {
-            "0": {
-              "name": "punctuation.definition.variable.event.begin.rainmeter"
-            }
-          },
-          "endCaptures": {
-            "0": {
-              "name": "punctuation.definition.variable.event.begin.rainmeter"
-            }
+          "match": "(\\$)(\\w+)(\\$)",
+          "captures": {
+            "0": { "name": "variable.other.constant.event.rainmeter" },
+            "1": { "name": "punctuation.definition.variable.begin.rainmeter" },
+            "2": { "name": "constant.language.variable.event.rainmeter" },
+            "3": { "name": "punctuation.definition.variable.end.rainmeter" }
           }
         },
         {
-          "begin": "%",
-          "end": "%",
-          "contentName": "variable.other.readwrite.env.rainmeter",
-          "beginCaptures": {
-            "0": {
-              "name": "punctuation.definition.variable.env.begin.rainmeter"
-            }
-          },
-          "endCaptures": {
-            "0": {
-              "name": "punctuation.definition.variable.env.begin.rainmeter"
-            }
+          "match": "(%)(\\w+)(%)",
+          "captures": {
+            "0": { "name": "variable.other.constant.env.rainmeter" },
+            "1": { "name": "punctuation.definition.variable.begin.rainmeter" },
+            "2": { "name": "constant.language.variable.env.rainmeter" },
+            "3": { "name": "punctuation.definition.variable.end.rainmeter" }
           }
         }
       ]
     },
-    "string-unquoted": {
+    "string-word": {
       "match": "\\w+",
-      "name": "string.unquoted.rainmeter"
+      "name": "string.word.rainmeter"
     },
     "string-quoted": {
       "patterns": [
@@ -349,7 +359,7 @@
             "0": { "name": "punctuation.definition.string.begin.rainmeter" }
           },
           "endCaptures": {
-            "0": { "name": "punctuation.definition.string.begin.rainmeter" }
+            "0": { "name": "punctuation.definition.string.end.rainmeter" }
           }
         },
         {
@@ -360,7 +370,7 @@
             "0": { "name": "punctuation.definition.string.begin.rainmeter" }
           },
           "endCaptures": {
-            "0": { "name": "punctuation.definition.string.begin.rainmeter" }
+            "0": { "name": "punctuation.definition.string.end.rainmeter" }
           }
         }
       ]
