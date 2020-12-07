@@ -1,137 +1,440 @@
 {
-  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
   "name": "rainmeter",
+  "scopeName": "source.rainmeter",
   "patterns": [
-    {
-      "include": "#strings"
-    },
-    {
-      "include": "#bangs"
-    },
-    {
-      "include": "#keywords"
-    },
-    {
-      "include": "#entities"
-    },
-    {
-      "include": "#primitives"
-    },
-    {
-      "include": "#variables"
-    },
-    {
-      "include": "#nestedvariables"
-    },
-    {
-      "include": "#comments"
-    }
+    { "include": "#comment" },
+    { "include": "#section" },
+    { "include": "#option" }
   ],
   "repository": {
-    "bangs": {
-      "name": "entity.name.function.rainmeter",
-      "begin": "!",
-      "end": "\\s|(?=\\])",
+    "comment": {
+      "match": "^(;).*",
+      "name": "comment.line.semicolon.rainmeter",
+      "captures": {
+        "1": { "name": "punctuation.definition.comment.rainmeter" }
+      }
+    },
+    "section": {
+      "begin": "^\\[",
+      "end": "\\]\\s*$",
+      "name": "meta.section.rainmeter",
+      "beginCaptures": {
+        "0": { "name": "punctuation.definition.section.begin.rainmeter" }
+      },
+      "endCaptures": {
+        "0": { "name": "punctuation.definition.section.end.rainmeter" }
+      },
       "patterns": [
         {
-          "name": "entity.name.function.rainmeter",
-          "match": "\\w+\\b"
+          "match": "(?<=\\[)(Skin|Rainmeter|Metadata|TrayMeasure|Variables)(?=\\])",
+          "name": "constant.language.type.rainmeter"
+        },
+        {
+          "match": "(?<=\\[)[\\w]+(?=\\])",
+          "name": "entity.name.type.rainmeter"
         }
       ]
     },
-    "keywords": {
+    "option": {
+      "begin": "^(?!\\s*$)",
+      "end": "$",
+      "name": "meta.option.rainmeter",
+      "patterns": [
+        { "include": "#option-include" },
+        { "include": "#option-bang" },
+        { "include": "#option-type" },
+        { "include": "#option-text" },
+        { "include": "#option-xy" },
+        { "include": "#option-meterstyle" },
+        { "include": "#option-group" },
+        { "include": "#option-defualt" }
+      ]
+    },
+    "option-defualt": {
+      "begin": "^((\\w+)\\b\\s*)(=)",
+      "end": "$",
+      "contentName": "meta.value.option.defualt.rainmeter",
+      "beginCaptures": {
+        "1": { "name": "meta.key.option.defualt.rainmeter" },
+        "2": { "name": "support.type.property-name.rainmeter" },
+        "3": { "name": "punctuation.separator.key-value.rainmeter" }
+      },
+      "patterns": [
+        { "include": "#string-quoted" },
+        { "include": "#variable" },
+        { "include": "#numeric" },
+        { "include": "#string-word" }
+      ]
+    },
+    "option-bang": {
+      "begin": "^((\\w+Action\\d*)\\s*)(=)",
+      "end": "$",
+      "contentName": "meta.value.option.bang.rainmeter",
+      "beginCaptures": {
+        "1": { "name": "meta.key.option.bang.rainmeter" },
+        "2": { "name": "support.type.property-name.rainmeter" },
+        "3": { "name": "punctuation.separator.key-value.rainmeter" }
+      },
+      "patterns": [
+        { "include": "#bang-multiple" },
+        { "include": "#bang-single" }
+      ]
+    },
+    "option-include": {
+      "begin": "^((@include\\w*)\\s*)(=)",
+      "end": "$",
+      "contentName": "meta.value.option.include.rainmeter",
+      "beginCaptures": {
+        "1": { "name": "meta.key.option.include.rainmeter" },
+        "2": { "name": "support.type.property-name.rainmeter" },
+        "3": { "name": "punctuation.separator.key-value.rainmeter" }
+      },
       "patterns": [
         {
-          "name": "keyword.control.rainmeter",
-          "match": "^[\\s]*?[\\w\\d]+"
-        },
-        {
-          "name": "keyword.operator.rainmeter",
-          "match": "[=\\+\\-\\?:><&\\*\\|/]+?"
-        },
-        {
-          "name": "variable.parameter.rainmeter",
-          "match": "^@\\w+"
+          "begin": "(?<==)\\s*",
+          "end": "\\s*$",
+          "contentName": "meta.path.rainmeter",
+          "patterns": [
+            {
+              "match": "(\\.)(ini|inc)",
+              "captures": {
+                "1": {
+                  "name": "punctuation.separator.filename-extension.rainmeter"
+                },
+                "2": {
+                  "name": "support.constant.media-type.rainmeter"
+                }
+              }
+            },
+            {
+              "match": "\\\\",
+              "name": "punctuation.support.path.rainmeter"
+            },
+            { "include": "#variable" },
+            { "include": "#string-word" }
+          ]
         }
       ]
     },
-    "strings": {
-      "name": "string.quoted.double.rainmeter",
-      "begin": "\"",
-      "end": "(\"|$)",
+    "option-meterstyle": {
+      "begin": "^((MeterStyle)\\s*)(=)",
+      "end": "$",
+      "contentName": "meta.value.option.meterstyle.rainmeter",
+      "beginCaptures": {
+        "1": { "name": "meta.key.option.meterstyle.rainmeter" },
+        "2": { "name": "support.type.property-name.rainmeter" },
+        "3": { "name": "punctuation.separator.key-value.rainmeter" }
+      },
       "patterns": [
+        { "include": "#variable" },
         {
-          "name": "constant.character.escape.rainmeter",
-          "match": "\\."
+          "match": "\\w+",
+          "name": "entity.other.inherited-class.rainmeter"
         },
         {
-          "name": "variable.parameter.rainmeter",
-          "include": "#variables"
-        },
-        {
-          "name": "variable.parameter.rainmeter.nested",
-          "include": "#nestedvariables"
+          "match": "\\|",
+          "name": "punctuation.separator.meterstyle.rainmeter"
         }
       ]
     },
-    "entities": {
-      "name": "entity.name.type.rainmeter",
-      "begin": "\\[(?![#$&])",
-      "end": "\\]",
+    "option-group": {
+      "begin": "^((Group)\\s*)(=)",
+      "end": "$",
+      "contentName": "meta.value.option.group.rainmeter",
+      "beginCaptures": {
+        "1": { "name": "meta.key.option.group.rainmeter" },
+        "2": { "name": "support.type.property-name.rainmeter" },
+        "3": { "name": "punctuation.separator.key-value.rainmeter" }
+      },
       "patterns": [
+        { "include": "#variable" },
         {
-          "name": "entity.name.type.rainmeter",
-          "include": "#bangs"
+          "match": "\\w+",
+          "name": "entity.name.class.rainmeter"
         },
         {
-          "name": "variable.parameter.rainmeter",
-          "include": "#variables"
+          "match": "\\|",
+          "name": "punctuation.separator.group.rainmeter"
+        }
+      ]
+    },
+    "option-type": {
+      "begin": "^((Meter|Measure|Plugin|MeasureName\\d*)\\s*)(=)",
+      "end": "$",
+      "contentName": "meta.value.option.type.rainmeter",
+      "beginCaptures": {
+        "1": { "name": "meta.key.option.type.rainmeter" },
+        "2": { "name": "support.type.property-name.rainmeter" },
+        "3": { "name": "punctuation.separator.key-value.rainmeter" }
+      },
+      "patterns": [
+        {
+          "match": "(?<=^Meter\\s*=\\s*)(Bar|Bitmap|Button|Histogram|Image|Line|Rotator|Roundline|Shape|String)(?=\\s*$)",
+          "name": "constant.language.type.meter.rainmeter"
         },
         {
-          "name": "string.quoted.double.rainmeter",
-          "include": "#strings"
+          "match": "(?<=^Measure\\s*=\\s*)(Calc|CPU|FreeDiskSpace|Loop|MediaKey|(Physical|Swap){0,1}Memory|Net(In|Out|Total)|NowPlaying|Plugin|RecycleManager|Registry|Script|String|Time|Uptime|WebParser)(?=\\s*$)",
+          "name": "constant.language.type.measure.rainmeter"
         },
         {
-          "name": "string.quoted.double.rainmeter",
-          "include": "#nestedvariables"
+          "match": "(?<=^MeasureName\\d*\\s*=\\s*)(\\w+)(?=\\s*$)",
+          "name": "entity.name.type.rainmeter"
+        },
+        {
+          "match": "(?<=^Plugin\\s*=\\s*)(ActionTimer|AudioLevel|CoreTemp|FileView|FolderInfo|InputText|Ping|Power|Process|Quote|ResMon|RunCommand|SpeedFan|SysInfo|UsageMonitor|WiFiStatus|Win7Audio|WindowMessage)(?=\\s*$)",
+          "name": "constant.language.type.plugin.rainmeter"
+        },
+        {
+          "match": "(?<=^Plugin\\s*=\\s*)(AdvancedCPU|iTunes|PerfMon)(?=\\s*$)",
+          "name": "invalid.deprecated.constant.language.type.plugin.rainmeter"
+        },
+        {
+          "match": "(?<=^Plugin\\s*=\\s*).*(\\b\\w+)(\\.)(dll|DLL)(?=\\s*$)",
+          "captures": {
+            "1": {
+              "name": "constant.language.type.plugin.additional.rainmeter"
+            },
+            "2": {
+              "name": "punctuation.separator.filename-extension.rainmeter"
+            },
+            "3": {
+              "name": "support.constant.media-type.rainmeter"
+            }
+          }
         }
       ]
     },
-    "primitives": {
+    "option-text": {
+      "begin": "^((Text)\\s*)(=)",
+      "end": "$",
+      "contentName": "meta.value.option.text.rainmeter",
+      "beginCaptures": {
+        "1": { "name": "meta.key.option.text.rainmeter" },
+        "2": { "name": "support.type.property-name.rainmeter" },
+        "3": { "name": "punctuation.separator.key-value.rainmeter" }
+      },
       "patterns": [
         {
-          "name": "constant.numeric.rainmeter",
-          "match": "(?<!%)\\b\\d*?\\.?\\d+\\b"
+          "match": "%\\d+",
+          "name": "variable.language.rainmeter"
+        },
+        { "include": "#string-quoted" },
+        { "include": "#variable" },
+        { "include": "#numeric" },
+        { "include": "#string-word" }
+      ]
+    },
+    "option-xy": {
+      "begin": "^((X|Y)\\s*)(=)",
+      "end": "(?<!\\.)\\b(\\d*|\\d+\\.\\d+)(r|R){0,1}\\s*$",
+      "contentName": "meta.value.option.xy.rainmeter",
+      "beginCaptures": {
+        "1": { "name": "meta.key.option.xy.rainmeter" },
+        "2": { "name": "support.type.property-name.rainmeter" },
+        "3": { "name": "punctuation.separator.key-value.rainmeter" }
+      },
+      "endCaptures": {
+        "1": { "name": "constant.numeric.xy.rainmeter" },
+        "2": { "name": "variable.language.rainmeter" }
+      },
+      "patterns": [
+        { "include": "#string-quoted" },
+        { "include": "#variable" },
+        { "include": "#numeric" }
+      ]
+    },
+    "bang-single": {
+      "patterns": [
+        { "include": "#string-quoted-magic" },
+        { "include": "#string-quoted" },
+        {
+          "match": "(?<==\\s*)(!{0,1}\\w+)\\b",
+          "captures": {
+            "1": { "name": "support.function.bang.rainmeter" }
+          }
+        },
+        { "include": "#variable" },
+        { "include": "#numeric" }
+      ]
+    },
+    "bang-multiple": {
+      "begin": "(?<==\\s*)(![eE]xecute){0,1}\\s*",
+      "end": "$",
+      "beginCaptures": {
+        "1": { "name": "support.function.bang.rainmeter" }
+      },
+      "contentName": "meta.bang-multiple.value.option.bang.rainmeter",
+      "patterns": [
+        { "include": "#string-quoted-magic" },
+        { "include": "#string-quoted" },
+        {
+          "match": "(\\[)(!{0,1}\\w+)\\b",
+          "captures": {
+            "1": { "name": "punctuation.definition.bang.begin.rainmeter" },
+            "2": { "name": "support.function.bang.rainmeter" }
+          }
+        },
+        {
+          "match": "\\]",
+          "name": "punctuation.definition.bang.end.rainmeter"
+        },
+        { "include": "#variable" },
+        { "include": "#numeric" }
+      ]
+    },
+    "numeric": {
+      "name": "storage.type.number.rainmeter",
+      "patterns": [
+        {
+          "match": "(?<!\\.)\\b(\\d+)\\b(?!\\.)",
+          "captures": { "1": { "name": "constant.numeric.int.rainmeter" } }
+        },
+        {
+          "match": "(?<!\\.)\\b(\\d+\\.\\d+)\\b(?!\\.)",
+          "captures": { "1": { "name": "constant.numeric.float.rainmeter" } }
+        },
+        {
+          "match": "(?<!\\.)\\b((0[xX])[0-9a-fA-F]+)\\b(?!\\.)",
+          "captures": {
+            "1": { "name": "constant.numeric.hex.rainmeter" },
+            "2": { "name": "support.type.numeric.hex.rainmeter" }
+          }
+        },
+        {
+          "match": "(?<!\\.)\\b((0[oO])[0-7]+)\\b(?!\\.)",
+          "captures": {
+            "1": { "name": "constant.numeric.oct.rainmeter" },
+            "2": { "name": "support.type.numeric.oct.rainmeter" }
+          }
+        },
+        {
+          "match": "(?<!\\.)\\b((0[bB])[01]+)\\b(?!\\.)",
+          "captures": {
+            "1": { "name": "constant.numeric.bin.rainmeter" },
+            "2": { "name": "support.type.numeric.bin.rainmeter" }
+          }
         }
       ]
     },
-    "nestedvariables": {
-      "name": "variable.parameter.rainmeter.nested",
-      "begin": "\\[[#%&\\$]",
-      "end": "\\]",
+    "variable": {
       "patterns": [
         {
-          "name": "variable.parameter.rainmeter.nested",
-          "include": "#nestedvariables"
+          "include": "#variable-built-in"
+        },
+        {
+          "match": "(#)(\\w+)(#)",
+          "captures": {
+            "0": { "name": "variable.other.readwrite.var.rainmeter" },
+            "1": { "name": "punctuation.definition.variable.begin.rainmeter" },
+            "2": { "name": "entity.name.variable.rainmeter" },
+            "3": { "name": "punctuation.definition.variable.end.rainmeter" }
+          }
+        },
+        {
+          "match": "(\\$)(\\w+)(\\$)",
+          "captures": {
+            "0": { "name": "variable.other.constant.event.rainmeter" },
+            "1": { "name": "punctuation.definition.variable.begin.rainmeter" },
+            "2": { "name": "constant.language.variable.event.rainmeter" },
+            "3": { "name": "punctuation.definition.variable.end.rainmeter" }
+          }
+        },
+        {
+          "match": "(%)(\\w+)(%)",
+          "captures": {
+            "0": { "name": "variable.other.constant.env.rainmeter" },
+            "1": { "name": "punctuation.definition.variable.begin.rainmeter" },
+            "2": { "name": "constant.language.variable.env.rainmeter" },
+            "3": { "name": "punctuation.definition.variable.end.rainmeter" }
+          }
         }
       ]
     },
-    "variables": {
+    "string-word": {
+      "match": "\\w+",
+      "name": "string.word.rainmeter"
+    },
+    "string-quoted-magic": {
+      "match": "(\"\"\")(.*)(\"\"\")",
+      "captures": {
+        "0": { "name": "string.quoted.magic.rainmeter" },
+        "1": { "name": "punctuation.definition.string.begin.rainmeter" },
+        "3": { "name": "punctuation.definition.string.end.rainmeter" }
+      }
+    },
+    "string-quoted": {
       "patterns": [
         {
-          "name": "variable.parameter.rainmeter",
-          "match": "(#.*?#|\\$.*?\\$|%.*?%)"
+          "begin": "'",
+          "end": "'",
+          "contentName": "string.quoted.single.rainmeter",
+          "beginCaptures": {
+            "0": { "name": "punctuation.definition.string.begin.rainmeter" }
+          },
+          "endCaptures": {
+            "0": { "name": "punctuation.definition.string.end.rainmeter" }
+          },
+          "patterns": [
+            { "include": "#variable" },
+            { "include": "#string-word" }
+          ]
+        },
+        {
+          "begin": "\"",
+          "end": "\"",
+          "contentName": "string.quoted.double.rainmeter",
+          "beginCaptures": {
+            "0": { "name": "punctuation.definition.string.begin.rainmeter" }
+          },
+          "endCaptures": {
+            "0": { "name": "punctuation.definition.string.end.rainmeter" }
+          },
+          "patterns": [
+            { "include": "#variable" },
+            { "include": "#string-word" }
+          ]
         }
       ]
     },
-    "comments": {
+    "variable-built-in": {
       "patterns": [
         {
-          "name": "comment.block.rainmeter",
-          "match": ";.*"
+          "match": "(#)(PROGRAMDRIVE|PROGRAMPATH|SETTINGSPATH|SKINSPATH|PLUGINSPATH|ADDONSPATH)(#)",
+          "captures": {
+            "0": { "name": "variable.other.constant.var.built-in.rainmeter" },
+            "1": { "name": "punctuation.definition.variable.begin.rainmeter" },
+            "2": { "name": "constant.language.variable.path.rainmeter" },
+            "3": { "name": "punctuation.definition.variable.end.rainmeter" }
+          }
+        },
+        {
+          "match": "(#)(@|CURRENTPATH|CURRENTFILE|ROOTCONFIGPATH|ROOTCONFIG|CURRENTCONFIG|CURRENTCONFIG(X|Y|WIDTH|HEIGHT))(#)",
+          "captures": {
+            "0": { "name": "variable.other.constant.var.built-in.rainmeter" },
+            "1": { "name": "punctuation.definition.variable.begin.rainmeter" },
+            "2": { "name": "constant.language.variable.skin.rainmeter" },
+            "3": { "name": "punctuation.definition.variable.end.rainmeter" }
+          }
+        },
+        {
+          "match": "(#)(CRLF|CURRENTSECTION|CONFIGEDITOR)(#)",
+          "captures": {
+            "0": { "name": "variable.other.constant.var.built-in.rainmeter" },
+            "1": { "name": "punctuation.definition.variable.begin.rainmeter" },
+            "2": { "name": "constant.language.variable.other.rainmeter" },
+            "3": { "name": "punctuation.definition.variable.end.rainmeter" }
+          }
+        },
+        {
+          "match": "(#)((WORK|SCREEN|PWORK|PSCREEN|VSCREEN)AREA(X|Y|WIDTH|HEIGHT)(@\\d+){0,1})(#)",
+          "captures": {
+            "0": { "name": "variable.other.constant.var.built-in.rainmeter" },
+            "1": { "name": "punctuation.definition.variable.begin.rainmeter" },
+            "2": { "name": "constant.language.variable.monitor.rainmeter" },
+            "5": { "name": "punctuation.definition.variable.end.rainmeter" }
+          }
         }
       ]
     }
-  },
-  "scopeName": "source.rainmeter"
+  }
 }
