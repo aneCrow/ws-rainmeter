@@ -2,7 +2,37 @@
   "name": "rainmeter",
   "scopeName": "source.rainmeter",
   "patterns": [
+    { "include": "#comment" },
+    { "include": "#section" },
+    { "include": "#option" }
   ],
   "repository": {
+    "comment": {
+      "match": "^(;).*",
+      "name": "comment.line.semicolon.rainmeter",
+      "captures": {
+        "1": { "name": "punctuation.definition.comment.begin.rainmeter" }
+      }
+    },
+    "section": {
+      "begin": "^\\[",
+      "end": "\\]\\s*$",
+      "name": "meta.section.rainmeter",
+      "beginCaptures": {
+        "0": { "name": "punctuation.definition.section.begin.rainmeter" }
+      },
+      "endCaptures": {
+        "0": { "name": "punctuation.definition.section.end.rainmeter" }
+      },
+      "patterns": [
+      ]
+    },
+    "option": {
+      "begin": "^(?!\\s*$)",
+      "end": "$",
+      "name": "meta.option.rainmeter",
+      "patterns": [
+      ]
+    }
   }
 }
